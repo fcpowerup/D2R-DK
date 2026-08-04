@@ -23,7 +23,7 @@
 
 图文说明（含截图）：
 
-[docs/d2r-dk-user-guide-食用指南-v1.4.0.html](docs/d2r-dk-user-guide-食用指南-v1.4.0.html)
+https://fcpowerup.github.io/D2R-DK/
 
 ## 运行环境
 
