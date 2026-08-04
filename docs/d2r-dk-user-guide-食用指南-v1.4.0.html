@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D2R-DK 食用指南</title>
+<style>
+:root {
+  --paper: #fafaf8; --paper-rgb: 250,250,248;
+  --surface: #fff; --surface-rgb: 255,255,255;
+  --ink: #0a0a0a; --grey-1: #f0f0ee; --grey-2: #d4d4d2; --grey-3: #737373;
+  --accent: #002FA7; --accent-soft: rgba(0,47,167,.08);
+  --border: #e0e0e0;
+  --sidebar-w: 220px; --topbar-h: 56px; --content-max: 1100px;
+  --sans: Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --mono: "JetBrains Mono","SF Mono",ui-monospace,monospace;
+  --fn-on-surface: 1.72;
+}
+html[data-theme="dark"] {
+  --paper: #111114; --paper-rgb: 17,17,20;
+  --surface: #1a1a1f; --surface-rgb: 26,26,31;
+  --ink: #e6e6e4; --grey-1: #222228; --grey-2: #3a3a42; --grey-3: #9a9a96;
+  --accent: #5b8cff; --accent-soft: rgba(91,140,255,.14);
+  --border: #2e2e36;
+}
+@media (prefers-color-scheme:dark) {
+  html:not([data-theme="light"]) {
+    --paper: #111114; --paper-rgb: 17,17,20;
+    --surface: #1a1a1f; --surface-rgb: 26,26,31;
+    --ink: #e6e6e4; --grey-1: #222228; --grey-2: #3a3a42; --grey-3: #9a9a96;
+    --accent: #5b8cff; --accent-soft: rgba(91,140,255,.14);
+    --border: #2e2e36;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{
+  margin:0;font-family:var(--sans);font-weight:400;font-size:17px;line-height:var(--fn-on-surface);
+  color:var(--ink);background:var(--paper);
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:48px 48px;background-position:-1px -1px;transition:background .2s,color .2s;
+}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{text-decoration:none}
+
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:var(--topbar-h);z-index:100;
+  display:flex;align-items:center;gap:12px;
+  padding:0 20px 0 calc(var(--sidebar-w) + 20px);
+  background:rgba(var(--paper-rgb),.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+}
+.topbar-title{flex:1;font-size:14px;font-weight:500;letter-spacing:.02em}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.topbar-meta{font-family:var(--mono);font-size:12px;color:var(--grey-3)}
+.menu-btn,.theme-btn{
+  border:1px solid var(--border);background:var(--surface);color:var(--ink);
+  padding:6px 12px;font-family:var(--sans);font-size:13px;cursor:pointer;border-radius:2px
+}
+.menu-btn:hover,.theme-btn:hover{border-color:var(--accent)}
+.menu-btn{display:none}
+
+.layout{display:flex;padding-top:var(--topbar-h)}
+.sidebar{
+  position:fixed;top:var(--topbar-h);left:0;width:var(--sidebar-w);
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;
+  padding:20px 16px 40px;border-right:1px solid var(--border);
+  background:rgba(var(--surface-rgb),.72);
+}
+.sidebar-label{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-3);margin:0 0 12px 8px}
+.sidebar nav a{
+  display:block;padding:7px 10px;font-size:17px;color:var(--ink);
+  text-decoration:none;border-left:2px solid transparent;
+  transition:border-color .15s,background .15s
+}
+.sidebar nav a:hover,.sidebar nav a.active{border-left-color:var(--accent);background:var(--accent-soft)}
+
+.main{flex:1;margin-left:var(--sidebar-w);padding:40px 32px 80px}
+.content{
+  max-width:var(--content-max);margin:0 auto;background:var(--surface);
+  border:1px solid var(--border);padding:44px 52px 64px;font-size:17px
+}
+
+.hero{margin-bottom:36px;padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.hero h1{margin:0 0 10px;font-size:clamp(22px,2.6vw,30px);font-weight:400;letter-spacing:-.02em;line-height:1.25}
+.hero .lead{margin:0;color:var(--grey-3);font-size:17px}
+.hero .lead strong{color:var(--accent);font-weight:500}
+
+.content h2{margin:44px 0 18px;padding-top:8px;font-size:24px;font-weight:500;letter-spacing:-.02em;border-top:1px solid var(--grey-2)}
+.content h2:first-of-type{border-top:none;margin-top:0}
+.content h3{margin:26px 0 12px;font-size:19px;font-weight:600;color:var(--accent)}
+.content h4{margin:20px 0 8px;font-size:17px;font-weight:600}
+.content p{margin:0 0 16px}
+.content ul,.content ol{margin:0 0 16px;padding-left:1.4em}
+.content li{margin-bottom:6px}
+.content hr{border:none;border-top:1px solid var(--grey-2);margin:32px 0}
+.content strong{font-weight:600}
+.content code{font-family:var(--mono);font-size:.92em;background:var(--grey-1);padding:2px 7px;border-radius:2px}
+.content pre{font-size:15px;background:var(--grey-1);padding:12px 16px;border-radius:2px;overflow-x:auto;margin:0 0 16px}
+
+.table-wrap{overflow-x:auto;margin:16px 0 24px;border:1px solid var(--border)}
+.content table{width:100%;border-collapse:collapse;font-size:17px;line-height:1.58}
+.content th{text-align:left;font-weight:600;font-size:17px;letter-spacing:0;text-transform:none;background:var(--grey-1);padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+.content td{padding:11px 14px;border-bottom:1px solid var(--grey-2);vertical-align:top}
+.content tr:last-child td{border-bottom:none}
+.content tr:hover td{background:var(--accent-soft)}
+
+.callout{margin:12px 0 16px;padding:12px 14px 12px 16px;border-left:3px solid var(--accent);background:var(--grey-1)}
+.callout-warn{border-left-color:#c0392b;background:rgba(192,57,43,.06)}
+.callout-label{display:block;font-family:var(--sans);font-size:17px;font-weight:600;margin-bottom:8px;color:var(--accent)}
+.callout-warn .callout-label{color:#c0392b}
+.callout p{margin:0;font-size:17px}
+
+figure{margin:16px 0 24px}
+figure img{display:block;max-width:100%;height:auto;margin:0 auto;border:1px solid var(--border);border-radius:2px}
+figcaption{font-size:15px;color:var(--grey-3);margin-top:8px;text-align:center}
+
+.content [id]{scroll-margin-top:20px}
+.content h2,.content h3,.content h4{scroll-margin-top:20px}
+
+@media (max-width:900px){
+  .menu-btn{display:block}
+  .topbar{padding-left:16px}
+  .sidebar{transform:translateX(-100%);transition:transform .2s;z-index:90;background:var(--surface)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:24px 16px 60px}
+  .content{padding:28px 20px 40px}
+}
+@media print{
+  body{background:#fff!important}
+  .topbar,.sidebar,.menu-btn{display:none!important}
+  .main{margin:0;padding:0}
+  .content{border:none;padding:0;max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn">目录</button>
+  <div class="topbar-title">D2R-DK 食用指南</div>
+  <div class="topbar-actions">
+    <span class="topbar-meta">文档 v1.4.0 · DK 0.1.2 build2608041344</span>
+    <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">深色</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-label">导航</div>
+    <nav id="nav">
+      <a href="#what">这是什么</a>
+      <a href="#features">功能</a>
+      <a href="#tutorial">教程</a>
+      <a href="#add-account-walkthrough" style="padding-left:24px;font-size:15px">添加账号</a>
+      <a href="#compact-ui" style="padding-left:24px;font-size:15px">紧凑模式</a>
+      <a href="#launch-args" style="padding-left:24px;font-size:15px">启动参数</a>
+      <a href="#game-settings" style="padding-left:24px;font-size:15px">游戏设置</a>
+      <a href="#mod" style="padding-left:24px;font-size:15px">Mod</a>
+      <a href="#batch-mod" style="padding-left:24px;font-size:15px">批量多开</a>
+      <a href="#window-layout" style="padding-left:24px;font-size:15px">窗口布局</a>
+      <a href="#tz-dc" style="padding-left:24px;font-size:15px">TZ / DC 监控</a>
+      <a href="#config-files" style="padding-left:24px;font-size:15px">配置文件</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <article class="content">
+
+      <header class="hero">
+        <h1>D2R-DK 食用指南</h1>
+        <p class="lead">国服<strong>多开器</strong> · 已支持批量多开<br>文档 v1.4.0 · 对应 <code>D2R-DK_v0.1.2_build2608041344</code></p>
+      </header>
+
+      <h2 id="what">这是什么</h2>
+      <p>D2R-DK 是启动多个《暗黑破坏神 II：重制版》客户端账号的工具，也就是多开器。每号独立画质 / 窗口 / 位置。当前主线国服。</p>
+      <p>用 Token 直启，可单开，也可勾选多个账号一键批量多开。</p>
+
+      <div class="callout callout-warn">
+        <span class="callout-label">注意</span>
+        <p>主密码无法找回，遗忘不可恢复。第三方辅助软件，风险自负。勿删 <code>.json</code> <code>.lock.json</code> <code>.ini</code> <code>*.bak</code>，否则丢号。</p>
+      </div>
+
+      <h2 id="features">功能</h2>
+      <div class="table-wrap">
+      <table>
+        <tr><th>功能</th><th>说明</th></tr>
+        <tr><td>Token 多开</td><td>国服直启，单独或批量，可调启动间隔</td></tr>
+        <tr><td>解压即用</td><td>设一次 <code>D2R.exe</code> 路径，不开战网。游戏更新时自行更新</td></tr>
+        <tr><td>每号独立</td><td>Token / 设置 / Mod 分开，多开不串</td></tr>
+        <tr><td>自定义窗口</td><td>标题任意填，多窗一眼分清</td></tr>
+        <tr><td>Mod 下拉选</td><td>自动识别 Mods，每号独立。支持 -txt / -locale enUS / -assettestmode 1</td></tr>
+        <tr><td>窗口布局</td><td>9 套布局槽，保存位置，启动自动摆窗</td></tr>
+        <tr><td>紧凑 / 托盘</td><td>紧凑模式 + 缩小到托盘，不占任务栏</td></tr>
+        <tr><td>加密</td><td>AES-256，导出/导入需另设密码</td></tr>
+        <tr><td>TZ / DC 监控</td><td>独立小窗看恐怖地带和黑毛，可置顶</td></tr>
+      </table>
+      </div>
+
+      <h2 id="tutorial">教程</h2>
+      <p>Token 是战网登录后地址栏 <code>ST=CN-…</code> 票据，不是密码。</p>
+
+      <h3 id="add-account-walkthrough">添加账号</h3>
+
+      <h4>1. 设主密码，点 + 新建</h4>
+      <p>首次运行设主密码解锁 → 点 + 新建。</p>
+      <figure>
+        <img src="UI/主界面，点 + 新建.png" alt="主界面点 + 新建" loading="lazy">
+        <figcaption>左侧 + 新建 打开添加账号弹窗</figcaption>
+      </figure>
+
+      <h4>2. 获取 → 登录战网</h4>
+      <p>TOKEN 行点获取，自动开浏览器进国服战网登录页。</p>
+      <figure>
+        <img src="UI/新建账号弹窗，TOKEN 获取-复制战网链接.png" alt="新建账号 TOKEN 获取与复制战网链接" loading="lazy">
+        <figcaption>TOKEN 旁 获取 打开浏览器；无法自动唤起时点 复制战网链接</figcaption>
+      </figure>
+      <p>没弹出？点「复制战网链接」手动贴到 Chrome / Edge / Firefox。</p>
+      <div class="callout callout-warn"><span class="callout-label">注意</span><p>登录第二个号时若浏览器打不开战网链接（显示「无法访问此页面」），通常是 IE 隐私模式问题导致读取了上次登录信息。可尝试：① 手动打开一个隐私/无痕窗口，点「复制战网链接」粘贴到地址栏登录；② 换一个与首次登录不同的浏览器。</p></div>
+
+      <h4>3. 网易 ≠ 战网</h4>
+      <div class="callout callout-warn">
+        <span class="callout-label">重要</span>
+        <p>网易 + 大神验证码 ≠ 战网账号 + 密码。取 Token 须战网登录。</p>
+      </div>
+      <ol>
+        <li>底部「无法登录？」→ 网易验证 → 找回战网账号密码。</li>
+        <li>用战网邮箱/手机 + 战网密码登录。</li>
+      </ol>
+      <figure>
+        <img src="UI/战网登录页底部「无法登录？」.png" alt="战网登录页底部无法登录" loading="lazy">
+        <figcaption>底部 无法登录？找回战网账号与密码</figcaption>
+      </figure>
+
+      <h4>4. 复制 ST 粘贴</h4>
+      <p>登录跳转后，复制地址栏完整 ST 回到 DK 粘贴。</p>
+      <figure>
+        <img src="UI/浏览器地址栏 ST Token.jpeg" alt="浏览器地址栏 ST Token" loading="lazy">
+        <figcaption>复制地址栏 ST，回到 DK 粘贴</figcaption>
+      </figure>
+
+      <h4>5. 填写保存</h4>
+      <p>贴 ST；填备注作窗口标题；浏览选 D2R.exe；选 Mod；按需勾 -txt / -locale enUS / -assettestmode 1。点 Save。</p>
+      <figure>
+        <img src="UI/填写完成的新建账号弹窗.png" alt="填写新建账号弹窗" loading="lazy">
+        <figcaption>填写 TOKEN、备注、路径、Mod 后保存</figcaption>
+      </figure>
+
+      <h4>6. 选设置</h4>
+      <p>回主界面选中号 → 游戏设置下拉选 Settings.json → 保存。</p>
+      <figure>
+        <img src="UI/游戏设置下拉选 Settings.json.png" alt="选择 Settings.json" loading="lazy">
+        <figcaption>游戏设置选 Settings.json</figcaption>
+      </figure>
+
+      <h4>7. 启动</h4>
+      <p>单开：高亮账号 → 勾窗口模式（可选）→ ▶ 启动。</p>
+      <p>批量：勾选 2 个及以上账号 → ▶ 启动（启动间隔仅批量生效）。</p>
+      <figure>
+        <img src="UI/高亮账号，点 ▶ 启动.png" alt="选中账号并启动" loading="lazy">
+        <figcaption>高亮 / 勾选账号 → ▶ 启动</figcaption>
+      </figure>
+
+      <h3 id="compact-ui">紧凑模式</h3>
+      <p>设置 → 紧凑模式，收起右栏只留账号列表。</p>
+      <figure>
+        <img src="UI/设置菜单中勾选紧凑模式.png" alt="设置菜单中的紧凑模式" loading="lazy">
+        <figcaption>设置 → 紧凑模式：勾选后收起右侧栏</figcaption>
+      </figure>
+      <figure>
+        <img src="UI/紧凑模式主界面（只有列表+启动栏）.png" alt="紧凑模式主界面" loading="lazy">
+        <figcaption>紧凑模式：仅账号列表、启动间隔与 ▶ 启动</figcaption>
+      </figure>
+
+      <h3 id="launch-args">启动参数</h3>
+      <div class="table-wrap">
+      <table>
+        <tr><th>参数</th><th>作用</th></tr>
+        <tr><td><code>-txt</code></td><td>Mod 用，多数建议勾</td></tr>
+        <tr><td><code>-locale enUS</code></td><td>语音英文</td></tr>
+        <tr><td><code>-assettestmode 1</code></td><td>反和谐</td></tr>
+        <tr><td><code>-w</code></td><td>窗口模式</td></tr>
+      </table>
+      </div>
+
+      <h3 id="game-settings">每号游戏设置</h3>
+      <p>多开共用一份设置会互相覆盖。DK 每号单独存，启动前自动注入。</p>
+      <pre>C:\Users\&lt;用户名&gt;\Saved Games\Diablo II Resurrected (CN)\Settings.json</pre>
+      <ol>
+        <li>选中号启动进游戏，调画面声音。</li>
+        <li>完全退出该 D2R。</li>
+        <li>回 DK 点「用当前设置更新此号」。</li>
+      </ol>
+      <p>成功后不再显示 · 缺 settings。改设置后关齐所有 D2R → 更新此号。</p>
+
+      <h3 id="mod">Mod</h3>
+      <pre>&lt;D2R目录&gt;\mods\Mod名\Mod名.mpq</pre>
+      <p>文件夹名与 .mpq 名须一致，区分大小写。设对路径后点刷新下拉选。</p>
+
+      <h3 id="batch-mod">批量多开</h3>
+      <p><strong>自 build <code>2608041344</code> 起已实装。</strong>勾选 2 个及以上账号后点 ▶ 启动即可批量多开（原版与 Mod 均可）。</p>
+      <ul>
+        <li>原版 / 带 CG 的 Mod：程序代按 Space 跳过 CG，再代过闪屏。</li>
+        <li>跳 CG 的 Mod：直接代过闪屏。</li>
+      </ul>
+      <p>批量启动时，若尚未勾选「代过闪屏」，程序会<strong>自动开启</strong>代过闪屏（状态栏提示一次），以便按间隔继续下一号；单开不改此项。</p>
+      <p>启动间隔仅在批量时生效，控制过完闪屏后到下一号的等待秒数。某号闪退时用右键 → 启动单独重拉该号，不会整批重开。</p>
+
+      <h3 id="backup">备份与换机</h3>
+      <p>文件 → 导出配置 → 新电脑 文件 → 导入配置。可复制整个文件夹备份，同一目录不要同时运行两个 D2R-DK。</p>
+      <p>导出时选两种模式：</p>
+      <ul>
+        <li><strong>仅导出设置</strong>：不带登录状态，文件小。换机后需重新粘贴 Token。</li>
+        <li><strong>完整迁移</strong>：在加密包内携带账号登录状态，导入后可直接启动。须设独立<strong>导出包密码</strong>（至少 12 位，包含字母和数字，不能与 DK.exe 主密码相同；建议再加符号）。</li>
+      </ul>
+      <p>导出项：账号基础信息固定导出；启动设置、窗口布局、每账号游戏设置、TZ/DC 监控窗偏好、墨水屏推送设置可按需勾选。</p>
+      <figure><img src="UI/导出配置界面.png" alt="导出配置界面" loading="lazy"><figcaption>导出配置：选择模式、勾选内容、设置导出包密码</figcaption></figure>
+      <figure><img src="UI/导入配置界面.png" alt="导入配置界面" loading="lazy"><figcaption>导入配置：选择文件、输入导出包密码、选择导入方式</figcaption></figure>
+      <div class="callout callout-warn"><span class="callout-label">重要</span><p>完整迁移导出包 = 加密备份所选账号登录状态。请分开保存导出包和导出包密码；不要和导出包一起发给网友或上传未加密网盘。文件或导出包密码泄露，按战网账号安全流程处理并重新获取 Token。</p></div>
+
+      <h3 id="window-layout">窗口布局</h3>
+      <p><strong>工具 → 窗口布局</strong>，可将当前各游戏窗口的位置保存到 9 个槽位中。保存后勾选「显示」可预览布局；点击「加载」快速恢复已保存的排列。</p>
+      <p><strong>设置 → 勾选「窗口自动布局」</strong>，下次启动游戏时将自动按最近一次保存的布局摆放窗口。</p>
+      <figure>
+        <img src="UI/窗口布局.png" alt="窗口布局管理" loading="lazy">
+        <figcaption>工具 → 窗口布局：9 个槽位，保存 / 加载 / 显示预览</figcaption>
+      </figure>
+
+      <h3 id="tz-dc">TZ / DC 监控</h3>
+      <p>工具 → TZ / DC 监控。独立窗可置顶，不影响多开。</p>
+      <figure>
+        <img src="UI/TZ-DC-监控独立小窗.png" alt="TZ / DC 监控窗" loading="lazy">
+        <figcaption>置顶 / 暂停 / 刷新；TZ 现/下区；DC 数值表</figcaption>
+      </figure>
+      <div class="table-wrap">
+      <table>
+        <tr><td>设置</td><td>墨水屏推送（可选）</td></tr>
+        <tr><td>置顶</td><td>窗始终在前</td></tr>
+        <tr><td>暂停/继续</td><td>停 60s 自动刷新</td></tr>
+        <tr><td>刷新</td><td>立即拉取</td></tr>
+      </table>
+      </div>
+      <ul>
+        <li>TZ：现（蓝）= 当前，下（橙）= 下个半时。每 30 分更新。</li>
+        <li>DC：术士君临/毁灭之王。国/美/欧/亚，SC-L / HC-L / SC-N / HC-N。显示方式可选 阶段数值或6段彩色条形。
+          <div class="table-wrap" style="margin-top:6px">
+          <table>
+            <tr><th>缩写</th><th>含义</th></tr>
+            <tr><td>SC</td><td>Softcore 普通模式</td></tr>
+            <tr><td>HC</td><td>Hardcore 专家模式</td></tr>
+            <tr><td>L</td><td>Ladder 天梯</td></tr>
+            <tr><td>N</td><td>Non-Ladder 非天梯</td></tr>
+          </table>
+          </div>
+        </li>
+      </ul>
+
+      <h3 id="config-files">配置文件</h3>
+      <div class="table-wrap">
+      <table>
+        <tr><th>文件</th><th>内容</th><th>可改？</th></tr>
+        <tr><td><code>D2R-DK.json</code></td><td>账号 / Token / 布局 / 开关</td><td>否（加密）</td></tr>
+        <tr><td><code>D2R-DK.lock.json</code></td><td>程序锁</td><td>否</td></tr>
+        <tr><td><code>D2R-DK.ini</code></td><td>窗口 / 主题 / 紧凑等</td><td>可（明文）</td></tr>
+        <tr><td><code>*.bak</code></td><td>备份</td><td>勿删</td></tr>
+      </table>
+      </div>
+
+      <h2 id="faq">常见问题</h2>
+      <div class="table-wrap">
+      <table>
+        <tr><th>问题</th><th>处理</th></tr>
+        <tr><td>没有 Token</td><td>按教程重取 ST</td></tr>
+        <tr><td>Token 无效</td><td>过期或不全。重取</td></tr>
+        <tr><td>浏览器秒关</td><td>换最新版。异常则复制链接手动登</td></tr>
+        <tr><td>浏览器打不开</td><td>复制战网链接贴到 Chrome / Edge</td></tr>
+        <tr><td>最小化找不到</td><td>看系统托盘</td></tr>
+        <tr><td>Mod 扫不到</td><td>查 <code>mods\名\名.mpq</code> 路径 + 大小写</td></tr>
+        <tr><td>某号闪退</td><td>右键该号 → 启动</td></tr>
+        <tr><td>批量少开</td><td>· 待设置 = 补 Token/路径，· 缺 settings = 先单开归档</td></tr>
+        <tr><td>原版能批量？</td><td>能。原版/有 CG 的 Mod 走 Space 跳 CG 再过闪屏；跳 CG 的 Mod 更快</td></tr>
+        <tr><td>窗口乱了</td><td>勿切窗，开布局 + 存布局槽</td></tr>
+        <tr><td>画质串号</td><td>关齐 D2R → 选中号 → 更新</td></tr>
+        <tr><td>无法连接服务器</td><td>串号、Token过期（用找回密码重置）、该号不支持Token登录等</td></tr>
+        <tr><td>忘主密码</td><td>无法找回。删 json + lock 重建（Token 重取）</td></tr>
+      </table>
+      </div>
+
+    </article>
+  </main>
+</div>
+
+<script>
+(function initFcpTheme(key) {
+  var k = key || 'fcp-doc-theme';
+  var root = document.documentElement;
+  var btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  var stored = localStorage.getItem(k);
+  var mql = window.matchMedia('(prefers-color-scheme: dark)');
+  function getSys() { return mql.matches ? 'dark' : 'light'; }
+  function apply(t) {
+    if (t === 'dark') { root.dataset.theme = 'dark'; }
+    else { delete root.dataset.theme; }
+    btn.textContent = t === 'dark' ? '浅色' : '深色';
+    btn.setAttribute('aria-label', t === 'dark' ? '切换浅色模式' : '切换深色模式');
+  }
+  var theme = stored || getSys();
+  apply(theme);
+  btn.addEventListener('click', function () {
+    var cur = root.dataset.theme;
+    var next = cur === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(k, next);
+    apply(next);
+  });
+  mql.addEventListener('change', function () {
+    if (!localStorage.getItem(k)) apply(getSys());
+  });
+
+  // sidebar toggle
+  var menuBtn = document.getElementById('menuBtn');
+  var sidebar = document.getElementById('sidebar');
+  if (menuBtn && sidebar) {
+    menuBtn.addEventListener('click', function () {
+      sidebar.classList.toggle('open');
+    });
+  }
+
+  // active nav highlighting on scroll
+  var navLinks = document.querySelectorAll('#nav a');
+  var sections = [];
+  navLinks.forEach(function (a) {
+    var id = a.getAttribute('href');
+    if (id && id.startsWith('#')) {
+      var el = document.getElementById(id.substring(1));
+      if (el) sections.push({ el: el, link: a });
+    }
+  });
+  window.addEventListener('scroll', function () {
+    var scrollY = window.scrollY + 100;
+    var current = null;
+    sections.forEach(function (s) {
+      if (s.el.offsetTop <= scrollY) current = s.link;
+    });
+    navLinks.forEach(function (a) { a.classList.remove('active'); });
+    if (current) current.classList.add('active');
+  });
+})();
+</script>
+
+</body>
+</html>
