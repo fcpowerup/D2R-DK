@@ -12,10 +12,10 @@
 - 获取 Token 改为打开系统默认浏览器
 
 <p align="center">
-  <img src="screenshots/switch-realm-menu.png" width="420" alt="设置菜单：切换区服入口">
-  <img src="screenshots/cheat-sheet-menu.png" width="240" alt="工具菜单：速查手册入口">
+  <img src="screenshots/mod-independent-settings-menu.png" width="280" alt="设置菜单：Mod 独立 Settings">
+  <img src="screenshots/mod-independent-settings.png" width="520" alt="游戏设置下拉显示 Settings.json(当前 Mod)">
 </p>
-<p align="center"><sub>左：设置 → 切换区服 · 右：工具 → 速查手册</sub></p>
+<p align="center"><sub>左：设置 → Mod 独立 Settings · 右：游戏设置按当前 Mod 分开</sub></p>
 
 ## 下载
 
