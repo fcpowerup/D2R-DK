@@ -4,9 +4,10 @@
 
 可同时启动多个客户端账号，支持国服与国际服，每号独立画质 / 窗口 / 位置。
 
-## 本次更新（v0.1.6）
+## 本次更新（v0.1.7）
 
-- 优化了自动窗口布局功能
+- 修复代过闪屏锁：国服和国际服的代过闪屏开关状态分别保存
+- 修复国际服账号列表显示问题：更新当前账号设置后，左侧列表保持原来的滚动位置
 
 <p align="center">
   <img src="screenshots/mod-independent-settings-menu.png" width="280" alt="设置菜单：Mod 独立 Settings">
@@ -18,15 +19,15 @@
 
 请到本仓库 **[Releases](https://github.com/fcpowerup/D2R-DK/releases)** 下载最新版：
 
-- `D2R-DK_v0.1.6_build2609220217_p.exe`
-- 同目录哈希文件 `D2R-DK_v0.1.6_build2609220217_p.txt`（可用 SHA256 自检）
+- `D2R-DK_v0.1.7_build2609250922_p.exe`
+- 同目录哈希文件 `D2R-DK_v0.1.7_build2609250922_p.txt`（可用 SHA256 自检）
 
-当前版本：**0.1.6** · build **`2609220217_p`** · 国服 / 国际服批量多开。
+当前版本：**0.1.7** · build **`2609250922_p`** · 国服 / 国际服批量多开。
 
 **SHA256**
 
 ```text
-89D4FD9F00E8649D7740CE02789073A57344D76237A32D39C809079F01C4A75A
+A3ABEDFCD11E69503D50B9AA448E30581674297B3BD5F7E1E030E62F94323B53
 ```
 
 ## 食用指南
