@@ -19,15 +19,15 @@
 
 请到本仓库 **[Releases](https://github.com/fcpowerup/D2R-DK/releases)** 下载最新版：
 
-- `D2R-DK_v0.1.7_build2609250922_p.exe`
-- 同目录哈希文件 `D2R-DK_v0.1.7_build2609250922_p.txt`（可用 SHA256 自检）
+- `D2R-DK_v0.1.7_build2609251049_p.exe`
+- 同目录哈希文件 `D2R-DK_v0.1.7_build2609251049_p.txt`（可用 SHA256 自检）
 
-当前版本：**0.1.7** · build **`2609250922_p`** · 国服 / 国际服批量多开。
+当前版本：**0.1.7** · build **`2609251049_p`** · 国服 / 国际服批量多开。
 
 **SHA256**
 
 ```text
-A3ABEDFCD11E69503D50B9AA448E30581674297B3BD5F7E1E030E62F94323B53
+2483D695FA3B2F9C2EAB1B38E956C9DE313936211EC271AC4E23539E0005D337
 ```
 
 ## 食用指南
