@@ -37,7 +37,7 @@ FF2A49C9C497BE97385C51A446320485CE7C312106E6D2702800A5F770123F2F
 
 ## 使用说明
 
-[在线图文说明](https://fcpowerup.github.io/D2R-DK/) · [离线单文件说明](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100007/使用说明.html)
+[在线图文说明](https://fcpowerup.github.io/D2R-DK/) · [离线单文件说明](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100007/D2R-DK-user-guide.html)
 
 ## 运行环境
 
