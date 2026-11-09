@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D2R-DK 使用说明</title>
+<style>
+:root {
+  --paper: #fafaf8; --paper-rgb: 250,250,248;
+  --surface: #fff; --surface-rgb: 255,255,255;
+  --ink: #0a0a0a; --grey-1: #f0f0ee; --grey-2: #d4d4d2; --grey-3: #737373;
+  --accent: #002FA7; --accent-soft: rgba(0,47,167,.08);
+  --border: #e0e0e0;
+  --sidebar-w: 220px; --topbar-h: 56px; --content-max: 1100px;
+  --sans: Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --mono: "JetBrains Mono","SF Mono",ui-monospace,monospace;
+  --fn-on-surface: 1.72;
+}
+html[data-theme="dark"] {
+  --paper: #111114; --paper-rgb: 17,17,20;
+  --surface: #1a1a1f; --surface-rgb: 26,26,31;
+  --ink: #e6e6e4; --grey-1: #222228; --grey-2: #3a3a42; --grey-3: #9a9a96;
+  --accent: #5b8cff; --accent-soft: rgba(91,140,255,.14);
+  --border: #2e2e36;
+}
+@media (prefers-color-scheme:dark) {
+  html:not([data-theme="light"]) {
+    --paper: #111114; --paper-rgb: 17,17,20;
+    --surface: #1a1a1f; --surface-rgb: 26,26,31;
+    --ink: #e6e6e4; --grey-1: #222228; --grey-2: #3a3a42; --grey-3: #9a9a96;
+    --accent: #5b8cff; --accent-soft: rgba(91,140,255,.14);
+    --border: #2e2e36;
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--topbar-h) + 12px)}
+body{
+  margin:0;font-family:var(--sans);font-weight:400;font-size:17px;line-height:var(--fn-on-surface);
+  color:var(--ink);background:var(--paper);
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:48px 48px;background-position:-1px -1px;transition:background .2s,color .2s;
+}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{text-decoration:none}
+
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:var(--topbar-h);z-index:100;
+  display:flex;align-items:center;gap:12px;
+  padding:0 20px 0 calc(var(--sidebar-w) + 20px);
+  background:rgba(var(--paper-rgb),.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+}
+.topbar-title{flex:1;font-size:14px;font-weight:500;letter-spacing:.02em}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.topbar-meta{font-family:var(--mono);font-size:12px;color:var(--grey-3)}
+.menu-btn,.theme-btn{
+  border:1px solid var(--border);background:var(--surface);color:var(--ink);
+  padding:6px 12px;font-family:var(--sans);font-size:13px;cursor:pointer;border-radius:2px
+}
+.menu-btn:hover,.theme-btn:hover{border-color:var(--accent)}
+.menu-btn{display:none}
+
+.layout{display:flex;padding-top:var(--topbar-h)}
+.sidebar{
+  position:fixed;top:var(--topbar-h);left:0;width:var(--sidebar-w);
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;
+  padding:20px 16px 40px;border-right:1px solid var(--border);
+  background:rgba(var(--surface-rgb),.72);
+}
+.sidebar-label{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--grey-3);margin:0 0 12px 8px}
+.sidebar nav a{
+  display:block;padding:7px 10px;font-size:17px;color:var(--ink);
+  text-decoration:none;border-left:2px solid transparent;
+  transition:border-color .15s,background .15s
+}
+.sidebar nav a:hover,.sidebar nav a.active{border-left-color:var(--accent);background:var(--accent-soft)}
+.sidebar nav a.sub{padding-left:24px;font-size:15px}
+
+.main{flex:1;margin-left:var(--sidebar-w);padding:40px 32px 80px}
+.content{
+  max-width:var(--content-max);margin:0 auto;background:var(--surface);
+  border:1px solid var(--border);padding:44px 52px 64px;font-size:17px
+}
+
+.hero{margin-bottom:36px;padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.hero h1{margin:0 0 10px;font-size:clamp(22px,2.6vw,30px);font-weight:400;letter-spacing:-.02em;line-height:1.25}
+.hero .lead{margin:0;color:var(--grey-3);font-size:17px}
+.hero .lead strong{color:var(--accent);font-weight:500}
+
+.content h2{margin:44px 0 18px;padding-top:8px;font-size:24px;font-weight:500;letter-spacing:-.02em;border-top:1px solid var(--grey-2)}
+.content h2:first-of-type{border-top:none;margin-top:0}
+.content h3{margin:26px 0 12px;font-size:19px;font-weight:600;color:var(--accent)}
+.content h4{margin:20px 0 8px;font-size:17px;font-weight:600}
+.content p{margin:0 0 16px}
+.content ul,.content ol{margin:0 0 16px;padding-left:1.4em}
+.content li{margin-bottom:6px}
+.content hr{border:none;border-top:1px solid var(--grey-2);margin:32px 0}
+.content strong{font-weight:600}
+.content code{font-family:var(--mono);font-size:.92em;background:var(--grey-1);padding:2px 7px;border-radius:2px}
+.content pre{font-size:15px;background:var(--grey-1);padding:12px 16px;border-radius:2px;overflow-x:auto;margin:0 0 16px}
+
+.table-wrap{overflow-x:auto;margin:16px 0 24px;border:1px solid var(--border)}
+.content table{width:100%;border-collapse:collapse;font-size:17px;line-height:1.58}
+.content th{text-align:left;font-weight:600;font-size:17px;letter-spacing:0;text-transform:none;background:var(--grey-1);padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+.content td{padding:11px 14px;border-bottom:1px solid var(--grey-2);vertical-align:top}
+.content tr:last-child td{border-bottom:none}
+.content tr:hover td{background:var(--accent-soft)}
+
+.callout{margin:12px 0 16px;padding:12px 14px 12px 16px;border-left:3px solid var(--accent);background:var(--grey-1)}
+.callout-warn{border-left-color:#c0392b;background:rgba(192,57,43,.06)}
+.callout-label{display:block;font-family:var(--sans);font-size:17px;font-weight:600;margin-bottom:8px;color:var(--accent)}
+.callout-warn .callout-label{color:#c0392b}
+.callout p{margin:0;font-size:17px}
+.callout ul{margin:0;padding-left:1.4em}
+.callout li{margin-bottom:4px}
+
+details.more{margin:12px 0 20px;border:1px solid var(--border);padding:10px 16px 14px;background:var(--surface)}
+details.more>summary{cursor:pointer;font-weight:600;color:var(--accent);padding:4px 0}
+details.more[open]>summary{margin-bottom:12px}
+
+figure{margin:16px 0 24px}
+figure img{display:block;max-width:100%;height:auto;margin:0 auto;border:1px solid var(--border);border-radius:2px}
+figure.zoomable img{cursor:zoom-in}
+figcaption{font-size:15px;color:var(--grey-3);margin-top:8px;text-align:center}
+.lightbox{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.88)}
+.lightbox.is-open{display:flex}
+.lightbox img{max-width:96vw;max-height:86vh;width:auto;height:auto;border:0;border-radius:2px;background:#000;cursor:zoom-out}
+.lightbox-close{position:absolute;top:10px;right:16px;border:0;background:transparent;color:#e8e8e8;font-size:28px;line-height:1;cursor:pointer}
+.lightbox-caption{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#bbb;font-size:14px}
+.todo-shot{margin:12px 0 20px;padding:10px 14px;border:1px dashed var(--grey-3);color:var(--grey-3);font-size:15px;border-radius:2px}
+
+.content [id]{scroll-margin-top:calc(var(--topbar-h) + 12px)}
+.content h2,.content h3,.content h4{scroll-margin-top:calc(var(--topbar-h) + 12px)}
+
+@media (max-width:900px){
+  .menu-btn{display:block}
+  .topbar{padding-left:16px}
+  .sidebar{transform:translateX(-100%);transition:transform .2s;z-index:90;background:var(--surface)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:24px 16px 60px}
+  .content{padding:28px 20px 40px}
+}
+@media print{
+  body{background:#fff!important}
+  .topbar,.sidebar,.menu-btn{display:none!important}
+  .main{margin:0;padding:0}
+  .content{border:none;padding:0;max-width:100%}
+  details.more{border:none;padding:0}
+  details.more>*{display:block}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn">目录</button>
+  <div class="topbar-title">D2R-DK 使用说明</div>
+  <div class="topbar-actions">
+    <span class="topbar-meta">文档 v1.6.0 · 对应 D2R-DK v0.1.9</span>
+    <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">深色</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-label">导航</div>
+    <nav id="nav">
+      <a href="#what">这是什么</a>
+      <a href="#features">有什么功能</a>
+      <a href="#quickstart">快速上手</a>
+      <a href="#add-account">添加账号</a>
+      <a class="sub" href="#token-login">国服：Token 登录</a>
+      <a class="sub" href="#bnet-login">国服：战网登录</a>
+      <a class="sub" href="#intl">国际服</a>
+      <a class="sub" href="#client-update">更新游戏客户端</a>
+      <a href="#launch">启动游戏</a>
+      <a href="#advanced">进阶功能</a>
+      <a class="sub" href="#baobao">宝宝巴士</a>
+      <a class="sub" href="#window-layout">窗口布局</a>
+      <a class="sub" href="#tz-dc">TZ / DC 监控</a>
+      <a class="sub" href="#eink">墨水屏推送</a>
+      <a class="sub" href="#game-settings">每号设置与键位</a>
+      <a class="sub" href="#death-exit">死亡小退</a>
+      <a class="sub" href="#backup">备份与迁移</a>
+      <a class="sub" href="#activation">激活</a>
+      <a class="sub" href="#window-title">窗口标题</a>
+      <a class="sub" href="#force-close">强制关闭</a>
+      <a href="#requirements">系统要求与依赖</a>
+      <a href="#faq">常见问题</a>
+      <a href="#menus">菜单及功能检索</a>
+      <a href="#changelog">更新记录</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <article class="content">
+
+      <header class="hero">
+        <h1>D2R-DK 使用说明</h1>
+        <p class="lead">文档 v1.6.0 · 对应 D2R-DK v0.1.9</p>
+      </header>
+
+      <h2 id="what">这是什么</h2>
+      <p>D2R-DK 是 Windows 上的《暗黑破坏神 II：重制版》多开工具，一台电脑可以同时开多个账号。勾选账号后点一下，就能批量打开。国服账号用 Token 或战网登录，国际服用战网账号和密码。</p>
+
+      <h2 id="features">有什么功能</h2>
+      <p>多开、批量启动、窗口布局、TZ / DC 监控等基础功能都能用；8PP 批量多开、快速启动模式、宝宝巴士、墨水屏推送是 Pro 高级功能，激活后可用。正式版无内置试用，试用码须向作者申请，完整对照见<a href="#activation">「激活」</a>。</p>
+
+      <h2 id="quickstart">快速上手</h2>
+      <ol>
+        <li>打开 D2R-DK。第一次要设「程序锁密码」，以后每次打开都要输入。忘了找不回。</li>
+        <li>点账号列表上方的「+ 新建」，添加一个账号（见下一节）。</li>
+        <li>在账号前面打勾。勾 2 个以上，就能一起开。</li>
+        <li>点左下角的「批量启动（N）」，N 是勾选的个数。没勾或只勾 1 个时，点「▶  启动」，开的是高亮的那个号。</li>
+      </ol>
+      <figure class="zoomable">
+        <img src="UI/主窗口-各部分标注.png" alt="D2R-DK 主窗口各部分标注" loading="lazy">
+        <figcaption>主窗口各部分（点图放大）</figcaption>
+      </figure>
+
+      <h2 id="add-account">添加账号</h2>
+
+      <h3 id="token-login">国服：Token 登录（战网老用户）</h3>
+      <ol>
+        <li>点「+ 新建」，在「TOKEN」一行点「获取」，会打开战网登录页。浏览器没打开，就点「复制战网链接」，粘贴到浏览器里。</li>
+      </ol>
+      <figure>
+        <img src="UI/新建账号弹窗-Token登录.png" alt="新建账号对话框，Token 登录" loading="lazy">
+        <figcaption>「新建账号」对话框：TOKEN 一行右边是「获取」和「复制战网链接」</figcaption>
+      </figure>
+      <ol start="2">
+        <li>用战网账号登录。登录成功后，地址栏里会出现 <code>ST=</code>。</li>
+      </ol>
+      <figure>
+        <img src="UI/浏览器地址栏 ST Token.jpeg" alt="浏览器地址栏里的 ST" loading="lazy">
+        <figcaption>复制 <code>ST=</code> 开始的整段</figcaption>
+      </figure>
+      <ol start="3">
+        <li>粘贴到「TOKEN」框。</li>
+        <li>填「备注」，在「D2R 路径」点「浏览」选中国服客户端的 <code>D2R.exe</code>，点「保存」。</li>
+      </ol>
+
+      <h3 id="bnet-login">国服：战网登录（新用户）</h3>
+      <ol>
+        <li>登录你的国服战网客户端，保持战网账号在登录状态。</li>
+        <li>在 D2R-DK 点「+ 新建」，「登录方式」选「战网登录」，点「记录当前战网账号」。记录完成后战网会自动退出。</li>
+        <li>填「备注」，在「D2R 路径」点「浏览」选中国服客户端的 <code>D2R.exe</code>，点「保存」。</li>
+        <li>建议在战网的设置里，把「点击 X 时」改为「完全退出战网」。</li>
+        <li>其他想多开的号，按第 1～3 步逐个添加。</li>
+      </ol>
+      <figure>
+        <img src="UI/新建账号弹窗-战网登录.png" alt="新建账号对话框，战网登录" loading="lazy">
+        <figcaption>「新建账号」对话框：选「战网登录」后点「记录当前战网账号」</figcaption>
+      </figure>
+      <div class="callout callout-warn">
+        <span class="callout-label">注意</span>
+        <p>战网国服模式的账号一旦添加，请勿再从战网里启动该账号，否则账号会失效，需要再添加一次。</p>
+        <p>游戏提示要更新时，使用「工具 → 更新游戏客户端」，更新后必须点「完成更新并保存账号」，具体步骤见<a href="#client-update">「更新游戏客户端」</a>。</p>
+      </div>
+
+      <h3 id="intl">国际服</h3>
+      <p>先在「设置 → 切换区服」切到国际服。再点「+ 新建」，填「战网账号」和「密码」，选中国际服客户端的 <code>D2R.exe</code>，点「保存」。</p>
+      <figure>
+        <img src="UI/新建账号弹窗-国际服.png" alt="新建账号对话框，国际服" loading="lazy">
+        <figcaption>「新建账号」对话框（国际服）</figcaption>
+      </figure>
+      <p>账号列表按「战网标识 - 备注」显示，例如「1A - 法师」；只填一项时只显示该项，两项都没填时显示「账号N」。开启「设置 → 战网标识打码」后，战网标识会打码，备注仍可区分账号。</p>
+
+      <h3 id="client-update">更新游戏客户端</h3>
+      <p>国服点「工具 → 更新游戏客户端」，国际服请自行登录战网更新，国际服工具菜单不显示这个入口。</p>
+      <ol>
+        <li>先关闭这个国服安装目录里的所有游戏，并等本次启动或记录账号操作结束。</li>
+        <li>打开「工具 → 更新游戏客户端」，从已保存的国服战网号中选一个，再点窗口里的「更新游戏客户端」。列表同样显示「战网标识 - 备注」；Token 号不在列表里，需要重新登录的号不能选。</li>
+        <li>在战网里手动更新游戏，可以一直等待，不用在一分钟内完成。</li>
+        <li>更新结束后，回到 D2R-DK 点「完成更新并保存账号」。程序关闭战网和 Agent、保存这个号，提示保存成功后窗口关闭。</li>
+      </ol>
+      <div class="callout callout-warn">
+        <span class="callout-label">必须保存</span>
+        <p>更新完成后必须点击“完成更新并保存账号”，账号才会写回。否则这个账号需要再走一次战网添加流程，才能启动游戏。</p>
+      </div>
+      <p>只关战网、更新窗口或 D2R-DK，都不能代替这个按钮。保存失败时窗口保留，按提示处理后再点一次。更新进行中不能切换区服；只打开窗口而未开始更新时，确认切服会关闭该窗口。</p>
+
+      <h2 id="launch">启动游戏</h2>
+      <ul>
+        <li>开一个号：点这个账号，再点「▶  启动」。</li>
+        <li>多开：勾选要开的账号，再点「批量启动」。</li>
+      </ul>
+
+      <h2 id="advanced">进阶功能</h2>
+
+      <h3 id="baobao">宝宝巴士（Pro 功能）</h3>
+      <p>主号建房、小号自动加房，用「下一局」这一个快捷键操作。</p>
+      <p>目前适配原版、YTE MOD 和红叶 MOD。如果你在使用中发现无法建房或者无法跟房，可以跟作者联系，提供 MOD 进行适配。</p>
+      <figure>
+        <img src="UI/主窗口-展开宝宝巴士.png" alt="主窗口展开宝宝巴士面板" loading="lazy">
+        <figcaption>主窗口展开宝宝巴士面板</figcaption>
+      </figure>
+      <p><strong>先设置：</strong></p>
+      <ol>
+        <li>在账号列表右键主号，选「设为宝宝巴士主号」。主号和小号都要用 D2R-DK 打开。
+          <figure>
+            <img src="UI/设为宝宝巴士主号.png" alt="账号右键菜单里的设为宝宝巴士主号" loading="lazy">
+            <figcaption>右键主号，选「设为宝宝巴士主号」</figcaption>
+          </figure>
+        </li>
+        <li>「工具 → 宝宝巴士」，填「前缀」（必填，只能是普通文字）。点「下一局」和「停止」按钮，再按一个单键来设快捷键（Esc 取消）。
+          <figure>
+            <img src="UI/宝宝巴士面板-v0.1.9.png" alt="宝宝巴士面板" loading="lazy">
+            <figcaption>宝宝巴士面板：前缀、序号、下一局和停止两个快捷键</figcaption>
+          </figure>
+        </li>
+      </ol>
+      <h4 id="baobao-checked">只让勾选的账号跟房</h4>
+      <p>在「设置」里打开「宝宝巴士只跟勾选账号」，再在账号列表中勾选主号和需要跟房的小号。已经开着但没有勾选的账号不会退房或加入新房。</p>
+      <ul>
+        <li>这个开关默认关闭，设置后会保存。</li>
+        <li>开启时，主号也必须勾选；一个账号都没勾选，或主号没勾选时，程序不会开始跟房。</li>
+        <li>关闭时，同区服中由 D2R-DK 打开的账号都可参与，不看账号列表里的勾选。</li>
+        <li>无论开关是否开启，都只带主号同区服的账号；国际服亚服、美服、欧服、测试服分别跟房。勾选变更从下一轮开始生效。</li>
+      </ul>
+      <p><strong>怎么用：</strong></p>
+      <ol>
+        <li><strong>首次建房</strong>：主号和小号都进入到游戏大厅界面，按一下「下一局」快捷键。主号按预定的房间号建房，小号自动加入。</li>
+        <li><strong>游戏里跟房</strong>：打完一局，不用退出房间，直接按「下一局」快捷键。主号自动退出房间、新建一个房间，房号在原有基础上 +1，小号自动加入。</li>
+      </ol>
+      <p>一轮完成后，状态栏会提示宝宝巴士已完成跟房。这时不按「下一局」，就不会再建房。</p>
+      <p>一轮进行中想停下来，按「停止」快捷键。</p>
+      <div class="callout callout-warn">
+        <span class="callout-label">注意</span>
+        <p>运行时程序会自动按键和点击，期间不要动鼠标和键盘。只支持窗口模式，游戏全屏时会停止。</p>
+        <p>使用宝宝巴士时，如果有游戏窗口长期处于最小化状态，建议在 Windows「系统属性 → 性能 → 自定义」中，取消勾选「在最大化和最小化时显示窗口动画」。</p>
+        <p>使用非黑屏 MOD 时，不建议让小号窗口长期保持最小化。</p>
+      </div>
+      <p>出错时会提示跟房已停止并说明原因，后面还没处理的号就不会再动。这时要你手动把各个号的游戏画面处理到大厅，再按一次「下一局」，程序会重新建房、让小号加房。</p>
+      <p>反复出错，或者看不出弹窗写的原因，把弹窗里的原因和日志发给作者。</p>
+
+      <h3 id="window-layout">窗口布局</h3>
+      <p>记住每个游戏窗口的位置、大小和是否最小化，一键摆好。</p>
+      <ol>
+        <li>把游戏窗口摆好，不想看的号可以最小化。</li>
+        <li>「工具 → 窗口布局…」，第一行下拉框选一个布局，点「保存」。</li>
+        <li>以后点「加载」就摆回去。在「设置」里勾「窗口自动布局」，启动游戏后会按当前布局自动摆好。</li>
+      </ol>
+      <figure>
+        <img src="UI/窗口布局-v0.1.9.png" alt="窗口布局管理界面" loading="lazy">
+        <figcaption>「工具 → 窗口布局…」</figcaption>
+      </figure>
+      <ul>
+        <li>共 10 个布局，按主键盘顺序排：布局1～布局9、布局0。国服和国际服各一组。</li>
+        <li>「清空」只清这个布局的窗口位置。勾「显示当前布局」可以看保存时的预览。</li>
+      </ul>
+      <div class="callout callout-warn">
+        <span class="callout-label">注意</span>
+        <p>部分窗口长时间最小化可能会卡死，这是游戏本身的 BUG。要不要把号最小化，请自己斟酌。</p>
+      </div>
+
+      <h4 id="layout-dock">吸附到游戏窗口</h4>
+      <p>勾「吸附」，布局窗口收成一条细条，放进游戏窗口的标题栏里，方便快速切换布局，或者在玩游戏时随手截图。</p>
+      <figure>
+        <img src="UI/窗口布局-吸附-标注.png" alt="窗口布局吸附在游戏窗口标题栏里，各按钮编号" loading="lazy">
+        <figcaption>吸附：细条放在游戏窗口标题栏里</figcaption>
+      </figure>
+      <ol>
+        <li><strong>布局下拉框</strong>：选中哪个布局，马上加载，不用再点「加载」。</li>
+        <li><strong>快切布局：F5</strong>这一项只显示现在设的切换快捷键。要改快捷键，先取消吸附，回原来的布局窗口里改。</li>
+        <li><strong>截图</strong>：把当前游戏窗口的画面复制到剪贴板，提示 2 秒后消失。</li>
+        <li><strong>吸附</strong>：取消勾选就回到原来的布局窗口。</li>
+        <li><strong>▾</strong>：展开出「保存」「加载」「切换布局」和目标窗口。目标默认「大号」，可以改成「当前游戏窗口」。</li>
+      </ol>
+      <p>游戏窗口最小化或关掉时，细条自己收起来。</p>
+
+      <h4 id="layout-name">自定义名字</h4>
+      <p>第三行「自定义名字」输入名字，点「保存」。下拉框和托盘菜单会显示它，例如「布局4 · 8 窗口 · 宝可梦模式」。名字最多 16 个字；旁边的「清空」只清名字，不动窗口位置。</p>
+
+      <h4 id="layout-hotkeys">布局快捷键</h4>
+      <p>有两种，可以同时用：</p>
+      <ul>
+        <li><strong>快速选择快捷键</strong>（第一行）：选「Alt + 数字」或「Ctrl + 数字」。之后按住 Alt（或 Ctrl）再按主键盘的 1～9、0，直接加载同号的布局。小键盘的数字不算。</li>
+        <li><strong>快速切换快捷键</strong>（第二行）：在「切换布局」选两个布局，例如布局1 和布局3；点「快速切换快捷键」，按一个键或两个键的组合，例如 F5。之后每按一次，就在这两个布局之间来回切。</li>
+        <li>设好后点「保存快捷键设置」才生效；「清除快捷键」取消对应的快捷键。</li>
+        <li>快捷键只在 D2R-DK 或它开的游戏窗口在最前面时有效，不影响其他程序。</li>
+      </ul>
+
+      <h3 id="tz-dc">TZ / DC 监控</h3>
+      <p>独立小窗，看恐怖地带（TZ）和黑毛（DC）的进度，边玩边看。</p>
+      <ul>
+        <li>打开：「工具 → TZ / DC 监控」，或托盘右键。</li>
+        <li>每 60 秒自动刷新。「刷新」可以立刻更新，「暂停」和「继续」控制自动刷新。</li>
+        <li>「置顶」让小窗始终在最前。</li>
+        <li>SC 普通，HC 专家，L 天梯，N 非天梯。</li>
+      </ul>
+      <figure>
+        <img src="UI/TZ-DC-监控独立小窗.png" alt="TZ / DC 监控独立小窗" loading="lazy">
+        <figcaption>TZ / DC 监控小窗</figcaption>
+      </figure>
+
+      <h3 id="eink">墨水屏推送（Pro 功能）</h3>
+      <ul>
+        <li>监控窗底部可以选把数据推送到墨水屏，需要已激活的 Pro 权限。</li>
+        <li>下一场没有更新时，程序会自动重新获取。</li>
+      </ul>
+      <figure>
+        <img src="UI/墨水屏推送-实拍.jpg" alt="墨水屏显示当前 TZ 和 DC 进度" loading="lazy">
+        <figcaption>墨水屏上显示当前 TZ、下一场 TZ 和 DC 进度</figcaption>
+      </figure>
+
+      <h3 id="game-settings">每号设置与键位</h3>
+      <p>每个号单独保存画质和声音，启动时自动写回。</p>
+      <ol>
+        <li>选中账号，启动游戏，调好画质。</li>
+        <li>回到 D2R-DK，点「用当前设置更新此号」。游戏开着也能点。</li>
+      </ol>
+      <p>用 Mod 时，在「设置」里勾「Mod 独立 Settings」，每个 Mod 各存一份，切换 Mod 时设置跟着 Mod 走。</p>
+      <p><strong>ESC 退房：</strong>账号设置里的「ESC退房」可选「原样」「按2次」「按1次」。只支持文件夹形式的 Mod，原版和打包成 <code>.mpq</code> 的 Mod 不能改。同一个游戏目录中使用相同 Mod 的账号共用选择；修改后从下一局起生效。</p>
+      <p><strong>几个号用同一套键位：</strong></p>
+      <ol>
+        <li>在游戏「操作」页改好键位，按底部的「储存自订档」。</li>
+        <li>进入「选项 → 游戏选项」，把「预设按键设定」改成「自订」。</li>
+        <li>当前角色也要用：在「操作」页按底部的「预设」，弹出「载入预设值」，选「自订」，按「套用」。</li>
+        <li>回到 D2R-DK，选中账号，点「用当前设置更新此号」，画质和键位一起存给这个号。</li>
+      </ol>
+
+      <h3 id="death-exit">死亡小退</h3>
+      <p>角色死亡时，程序自动退出房间，保住佣兵和宝宝。代价是会损失经验。</p>
+      <ul>
+        <li>账号设置里选了 Mod 后，才能勾「死亡小退」。原版没有这一项。</li>
+        <li>设置按 Mod 分开记。改了之后，要重新启动对应的游戏才生效。</li>
+        <li>只支持文件夹形式的 Mod。打包成 <code>.mpq</code> 的 Mod 会提示「不支持mpq打包格式的mod」。</li>
+        <li>这是实验性功能。由于使用环境和 Mod 本身差异，不保证能 100% 生效，开启后有任何损失本程序不承担任何责任。</li>
+      </ul>
+
+      <h3 id="backup">备份与迁移</h3>
+      <p>换电脑时，在旧电脑用「文件 → 导出配置...」，在新电脑用「文件 → 导入配置...」。</p>
+      <ul>
+        <li><strong>仅导出设置</strong>：不带登录信息。新电脑上国服 Token 号要重新粘贴 Token，国服战网号要重新记录账号。</li>
+        <li><strong>完整迁移</strong>：带上国服 Token 和有效的国服战网登录资料。Token 号导入后可直接启动；战网登录资料可能失效，导入后可能需要重新登录战网并记录账号。国际服的战网密码不带，要重新填。</li>
+      </ul>
+      <p>导出时要设导出包密码：至少 12 位，同时有字母和数字，不能和程序锁密码相同。</p>
+      <p>完整迁移包里有 Token，请当作密码保管，不要发给别人。激活状态不随导出包走，换电脑后要重新激活。</p>
+      <p>距离上次备份超过 30 天，启动时会提醒备份。</p>
+
+      <h3 id="activation">激活（Pro 功能）</h3>
+      <div class="table-wrap">
+      <table>
+        <tr><th>功能</th><th style="text-align:center">基础功能</th><th style="text-align:center">Pro 高级功能<br>（激活后）</th></tr>
+        <tr><td>单号启动</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>勾选 1～7 个账号批量启动</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>国服战网登录</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>每号游戏设置（画质、键位、Mod、启动参数）</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>窗口布局</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>TZ / DC 监控</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>死亡小退</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>自定义窗口标题</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>配置备份与迁移</td><td style="text-align:center">✓</td><td style="text-align:center">✓</td></tr>
+        <tr><td>8PP 批量多开（勾选 8 个及以上账号批量启动）</td><td style="text-align:center">—</td><td style="text-align:center">✓</td></tr>
+        <tr><td>快速启动模式</td><td style="text-align:center">—</td><td style="text-align:center">✓</td></tr>
+        <tr><td>宝宝巴士</td><td style="text-align:center">—</td><td style="text-align:center">✓</td></tr>
+        <tr><td>墨水屏推送</td><td style="text-align:center">—</td><td style="text-align:center">✓</td></tr>
+        <tr><td>后续增加的高级功能</td><td style="text-align:center">—</td><td style="text-align:center">✓</td></tr>
+      </table>
+      </div>
+      <p>不激活也能用基础功能。正式版无内置试用；向作者申请试用码后，同样要在「设置 → 激活…」里保存并验证。</p>
+      <ol>
+        <li>「帮助 → 关于 D2R DK...」，扫「扫码加群」进群。或扫「微信赞赏码」，留言写上 QQ 或昵称。在群里联系作者，说明要哪一种。</li>
+        <li>新购提供月卡（31 天）、季度卡（93 天）、半年卡（183 天）和年卡（365 天）。月卡、季度卡不需要机器码。</li>
+        <li>半年卡、年卡、永久卡都绑定机器。新购半年卡或年卡时，打开「设置 → 激活…」，点「机器码」旁的「复制」，把机器码发给作者。永久卡只兼容已有激活码，当前不提供新购。</li>
+        <li>拿到激活码后，粘贴到「激活码」框，点「保存并验证」。通过后，「状态」会显示到期日；已有永久卡显示永久。</li>
+      </ol>
+      <p>激活码要整行复制，不漏字，也不多出空格。未激活时，高级功能会提示「高级版功能，请激活后使用」。新码验证并保存成功后替换当前码；续费后使用作者新发的码，旧码的到期日不会自动延长。</p>
+
+      <h3 id="window-title">窗口标题</h3>
+      <p>账号设置里勾「自定义窗口标题」，再选是否带「战网」「备注」。下面的「标题预览」会显示游戏窗口的名字。</p>
+      <ul>
+        <li>每个号的标题必须不同。宝宝巴士和批量启动靠标题找窗口。</li>
+        <li>不要粘贴 Tab 这类看不见的字符，否则宝宝巴士会报「账号退房方式无效」。</li>
+        <li>标题尽量写短，一眼能分清是哪个号。</li>
+      </ul>
+
+      <h3 id="force-close">强制关闭</h3>
+      <p>窗口卡死、点不动时用。右键账号，选「强制关闭此账号游戏」，只关这一个号。</p>
+      <p>游戏会被直接结束，<strong>没存下的进度会丢失</strong>。窗口还能操作时，先在游戏里正常退出。</p>
+
+      <h2 id="requirements">系统要求与依赖</h2>
+      <ul>
+        <li><strong>系统</strong>：Windows 10 或 11，64 位。</li>
+        <li><strong>游戏</strong>：已安装《暗黑破坏神 II：重制版》，且能在本机正常打开。</li>
+        <li><strong>运行库</strong>：程序目前不内置 VC++ 运行库。提示缺少 VCRUNTIME140.dll 时，安装微软的 VC++ 2015-2022 x64 运行库。</li>
+        <li><strong>权限</strong>：建议右键 exe，选「以管理员身份运行」。</li>
+        <li><strong>放置位置</strong>：把 exe 放在固定文件夹，不用安装。首次运行后，同一文件夹会生成 <code>D2R-DK.json</code>、<code>D2R-DK.lock.json</code>、<code>D2R-DK.ini</code> 和 <code>.bak</code> 备份文件，不要删，删了会丢账号。</li>
+      </ul>
+
+      <h2 id="faq">常见问题</h2>
+      <div class="table-wrap">
+      <table>
+        <tr><th>现象</th><th>怎么办</th></tr>
+        <tr><td>勾了 8 个以上，「批量启动」是灰的</td><td>8 个及以上需要已激活的 Pro 权限，未激活时提示「高级版功能，请激活后使用」。勾 7 个以内随时能批量启动。</td></tr>
+        <tr><td>批量开到一半想停</td><td>点「停止」，已经开的游戏不会关。</td></tr>
+        <tr><td>Token 没有自动出现</td><td>程序不会自动抓 Token。「获取」只打开浏览器，要自己复制地址栏里 <code>ST=</code> 开头的整段，粘贴回去。</td></tr>
+        <tr><td>Token 无效，或无法连接服务器</td><td>Token 过期或没复制完整。重新登录网页，复制完整的 <code>ST=</code> 再试。「战网标识」只是备注，不能当 Token 用。</td></tr>
+        <tr><td>登录页提示要网易账号</td><td>在战网登录页底部点「无法登录？」，用网易账号找回战网账号和密码。</td></tr>
+        <tr><td>这是第三方工具，有风险吗</td><td>有账号风险，使用风险自负。</td></tr>
+        <tr><td>批量少开了几个</td><td>看账号名后的小字：「· 待设置」要补 Token 或游戏路径；「· 缺 settings」要先单独启动一次，再点「用当前设置更新此号」。</td></tr>
+        <tr><td>某个号闪退</td><td>右键该号，选「单独启动」重开。</td></tr>
+        <tr><td>提示缺 VCRUNTIME140.dll</td><td>安装 VC++ 2015-2022 x64 运行库。</td></tr>
+        <tr><td>提示需要管理员权限</td><td>右键 exe，选「以管理员身份运行」。</td></tr>
+        <tr><td>窗口最小化后找不到了</td><td>看系统托盘，单击图标恢复。</td></tr>
+        <tr><td>各号画质串了</td><td>进这个号的游戏把画质调回来，再选中该号点「用当前设置更新此号」。</td></tr>
+        <tr><td>窗口位置乱了，或自动布局没生效</td><td>启动时不要切换窗口。确认已勾「窗口自动布局」，并且布局已经保存过。</td></tr>
+        <tr><td>Mod 扫不出来</td><td>Mod 要放在 <code>D2R 游戏目录\mods\Mod名\Mod名.mpq</code>，文件夹名和 .mpq 名一致，区分大小写。设好游戏路径后，点 Mod 旁的「刷新」。</td></tr>
+        <tr><td>忘了程序锁密码</td><td>找不回，只能重新开始。有导出包的话，可以导入。</td></tr>
+        <tr><td>宝宝巴士按「下一局」没反应</td><td>检查：前缀已填，两个快捷键都已设，主号已设且用 D2R-DK 打开，这一轮没有正在运行。</td></tr>
+        <tr><td>宝宝巴士停了，或提示「账号退房方式无效」</td><td>多半是两个号的窗口标题相同，或标题里混进了看不见的字符。</td></tr>
+        <tr><td>激活码无效</td><td>「格式无效」：检查是否漏字、多了空格。「与当前机器码不匹配」：把「设置 → 激活…」里现在的机器码发给作者重新发码。「已过期」：联系作者续费。</td></tr>
+      </table>
+      </div>
+
+      <h2 id="menus">菜单及功能检索</h2>
+
+      <h3>文件</h3>
+      <ul>
+        <li><strong>新建配置</strong>：添加账号，同「+ 新建」。</li>
+        <li><strong>导出配置... / 导入配置...</strong>：备份或换电脑，见「备份与迁移」。</li>
+        <li><strong>退出</strong>：关闭 D2R-DK。</li>
+      </ul>
+
+      <h3>设置</h3>
+      <figure>
+        <img src="UI/设置菜单-v0.1.9.png" alt="设置菜单" loading="lazy">
+        <figcaption>「设置」菜单</figcaption>
+      </figure>
+      <ul>
+        <li><strong>激活…</strong>：输入激活码，查看激活状态和有效期。</li>
+        <li><strong>默认 D2R 路径...</strong>：设一次 <code>D2R.exe</code>，之后新建账号会自动填好。设好后这一项后面会括注「已设置」。</li>
+        <li><strong>切换区服</strong>：在国服和国际服之间切换，括号里显示当前区服。两个区服各有一套账号。</li>
+        <li><strong>以管理员运行</strong>：用管理员身份重新打开 D2R-DK。已经是管理员运行时没有这一项。</li>
+        <li><strong>深色模式</strong>：界面用深色主题。</li>
+        <li><strong>紧凑模式</strong>：收起右侧的账号设置。</li>
+        <li><strong>开机自启</strong>：登录 Windows 时打开 D2R-DK，不会自动开游戏。</li>
+        <li><strong>置顶显示</strong>：主窗口始终在最前面。</li>
+        <li><strong>开车时窗口最小化</strong>：宝宝巴士运行时，游戏窗口自动最小化。</li>
+        <li><strong>宝宝巴士只跟勾选账号</strong>：默认关闭。开启后只让勾选的主号和小号参与跟房，详见<a href="#baobao-checked">使用方法</a>。</li>
+        <li><strong>窗口自动布局</strong>：启动游戏后，按保存的布局摆放窗口。</li>
+        <li><strong>关闭DK时关闭游戏窗口</strong>：点 × 时，同时关掉本工具开的游戏。</li>
+        <li><strong>代过[按任意键]画面</strong>：自动跳过启动时的「按任意键」画面。批量启动时会自动打开。</li>
+        <li><strong>快速启动模式</strong>：仅国服，Pro 功能。</li>
+        <li><strong>战网标识打码</strong>：账号列表、更新窗口、标题预览及日志中的战网标识打码，备注仍显示。</li>
+        <li><strong>Mod 独立 Settings</strong>：每个 Mod 各存一份游戏设置，切换 Mod 时设置跟着 Mod 走。</li>
+        <li><strong>高级选项…</strong>：打开高级设置，可显示日志窗口。</li>
+      </ul>
+
+      <h3>工具</h3>
+      <p>工具菜单从上到下分三组：窗口布局、TZ / DC 监控、宝宝巴士；速查手册；更新游戏客户端（仅国服显示）。</p>
+      <ul>
+        <li><strong>窗口布局…</strong>：保存和加载游戏窗口位置。吸附的说明见<a href="#window-layout">「窗口布局」</a>。</li>
+        <li><strong>TZ / DC 监控</strong>：打开小窗，看恐怖地带和黑毛进度。</li>
+        <li><strong>宝宝巴士</strong>：打开宝宝巴士面板（Pro 功能）。面板开着时，这一项前面有勾。</li>
+        <li><strong>速查手册</strong>：用浏览器打开暗黑破坏神 II 速查页。</li>
+        <li><strong>更新游戏客户端</strong>：仅国服，手动更新后必须点「完成更新并保存账号」，见<a href="#client-update">更新步骤</a>。</li>
+      </ul>
+
+      <h3>帮助</h3>
+      <ul>
+        <li><strong>检查更新…</strong>：查看有没有新版本。</li>
+        <li><strong>关于 D2R DK...</strong>：看版本号，扫码加群或赞赏。</li>
+      </ul>
+
+      <h3>账号右键菜单</h3>
+      <ul>
+        <li><strong>单独启动</strong>：只开这个号，不看勾选。</li>
+        <li><strong>编辑账号</strong>：修改账号信息。</li>
+        <li><strong>设为宝宝巴士主号</strong>（Pro 功能）：名字前显示 ★，名字变成金色。</li>
+        <li><strong>全选、反选</strong>：勾选全部账号，或把勾选反过来。</li>
+        <li><strong>上移、下移</strong>：调整账号顺序。</li>
+        <li><strong>删除账号</strong>：删除这个账号。</li>
+        <li><strong>强制关闭此账号游戏</strong>：见「强制关闭」。</li>
+        <li><strong>关闭所有游戏</strong>：关掉当前区服里本工具开的游戏。</li>
+      </ul>
+
+      <h3>主界面按钮</h3>
+      <ul>
+        <li><strong>+ 新建</strong>：添加账号。</li>
+        <li><strong>窗口模式</strong>：所有号都以窗口方式打开。</li>
+        <li><strong>启动间隔</strong>：批量时，每个号之间等几秒。</li>
+        <li><strong>▶  启动 / 批量启动（N）</strong>：勾 0 或 1 个时开选中的号，勾 2 个以上时批量开勾选的号。</li>
+        <li><strong>停止</strong>：批量时出现，点后不再开剩余的号。</li>
+        <li><strong>启动下一个</strong>：批量时出现，结束当前号的等待，开下一个。</li>
+        <li><strong>用当前设置更新此号</strong>：把游戏现在的画质和键位存给选中的号。</li>
+      </ul>
+
+      <h2 id="changelog">更新记录</h2>
+      <h3>文档 v1.6.0</h3>
+      <ul>
+        <li>补充「宝宝巴士只跟勾选账号」设置开关的使用方法。</li>
+        <li>补充国服更新游戏客户端及必须手动保存账号的步骤，国际服自行在战网更新。</li>
+        <li>同步账号显示、ESC 退房和工具菜单分组。</li>
+        <li>同步 Pro 激活、试用码、新购四档及历史永久卡说明。</li>
+        <li>补齐 v0.1.9 的新增功能和改进记录，包括 ESC 退房、客户端更新、开机自启等。</li>
+      </ul>
+      <h3>v0.1.9</h3>
+      <ul>
+        <li>国服新增「战网登录」添加账号，与 Token 登录二选一；两者可并存，登录和建号都能用</li>
+        <li>新增宝宝巴士：主号建房、小号自动加房，可只跟勾选账号，并可选择开车时最小化窗口（Pro 功能）</li>
+        <li>新增 ESC 退房设置：文件夹形式的 Mod 可选「原样」「按2次」「按1次」，修改后从下一局起生效</li>
+        <li>新增国服「更新游戏客户端」入口，更新完成后可保存当前战网账号</li>
+        <li>窗口管理升级：布局改为 10 个，可设名字，记住最小化状态和窗口叠放顺序，支持数字键直接加载和两个布局来回切换，还能吸附到游戏窗口标题栏</li>
+        <li>大幅提升登录和建房速度</li>
+        <li>新增快速启动模式（Pro 功能，仅国服）</li>
+        <li>新增死亡小退，需使用文件夹形式的 Mod，不支持 <code>.mpq</code> 打包格式</li>
+        <li>新增开机自启，登录 Windows 后打开 D2R-DK</li>
+        <li>新增右键「强制关闭此账号游戏」，可单独结束指定账号的游戏</li>
+        <li>支持游戏运行中保存当前画质和自订键位，无需先关闭游戏</li>
+        <li>更多设置按国服和国际服分别保存，包括启动间隔、自动布局、布局快捷键、自定义标题及 Mod 独立 Settings 等</li>
+        <li>配置保护升级：启动、退出和升级迁移前自动备份，损坏时尝试恢复；完整迁移可带上有效的国服战网登录资料，并增加 30 天备份提醒</li>
+      </ul>
+
+      <details class="more">
+        <summary>更早的版本：文档 v1.5.0，以及 v0.1.8 至 v0.1.0</summary>
+        <h3>文档 v1.5.0</h3>
+        <ul>
+          <li>简版与详细版合并为一份</li>
+          <li>写明国际服战网密码不会写入导出包</li>
+        </ul>
+        <h3>v0.1.8</h3>
+        <ul><li>优化窗口布局和「代过[按任意键]画面」</li></ul>
+        <h3>v0.1.7</h3>
+        <ul>
+          <li>修复「代过[按任意键]画面」开关状态：国服和国际服分别保存</li>
+          <li>修复国际服账号列表显示问题</li>
+        </ul>
+        <h3>v0.1.6</h3>
+        <ul><li>优化自动窗口布局</li></ul>
+        <h3>v0.1.4</h3>
+        <ul>
+          <li>Mod 独立 Settings</li>
+          <li>右键「关闭所有游戏」，设置「关闭DK时关闭游戏窗口」</li>
+          <li>获取 Token 改为调用系统默认浏览器</li>
+        </ul>
+        <h3>v0.1.3</h3>
+        <ul>
+          <li>新增国际服多开、速查手册、账号排序</li>
+          <li>右键「单独启动」；批量进行中主按钮变为「停止」</li>
+        </ul>
+        <h3>v0.1.2 与 v0.1.1</h3>
+        <ul>
+          <li>国服 Token 直启，每号独立设置，窗口布局，TZ / DC 监控，紧凑模式与托盘，配置加密</li>
+        </ul>
+        <h3>v0.1.0</h3>
+        <ul><li>国服 Token 直启多开，账号列表，Mod 下拉选择</li></ul>
+      </details>
+
+    </article>
+  </main>
+</div>
+
+<script>
+(function initFcpTheme(key) {
+  var k = key || 'fcp-doc-theme';
+  var root = document.documentElement;
+  var btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  var mql = window.matchMedia('(prefers-color-scheme: dark)');
+  function getSys() { return mql.matches ? 'dark' : 'light'; }
+  function readStored() {
+    try { return localStorage.getItem(k); } catch (e) { return null; }
+  }
+  function apply(t) {
+    root.dataset.theme = t === 'dark' ? 'dark' : 'light';
+    btn.textContent = t === 'dark' ? '浅色' : '深色';
+    btn.setAttribute('aria-label', t === 'dark' ? '切换浅色模式' : '切换深色模式');
+  }
+  apply(readStored() || getSys());
+  btn.addEventListener('click', function () {
+    var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem(k, next); } catch (e) {}
+    apply(next);
+  });
+  mql.addEventListener('change', function () {
+    if (!readStored()) apply(getSys());
+  });
+
+  // sidebar toggle
+  var menuBtn = document.getElementById('menuBtn');
+  var sidebar = document.getElementById('sidebar');
+  if (menuBtn && sidebar) {
+    menuBtn.addEventListener('click', function () {
+      sidebar.classList.toggle('open');
+    });
+  }
+
+  // open collapsed <details> that contain the linked anchor
+  function openForHash() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    var el = id ? document.getElementById(id) : null;
+    while (el) {
+      if (el.tagName === 'DETAILS') el.open = true;
+      el = el.parentElement;
+    }
+  }
+  window.addEventListener('hashchange', openForHash);
+  openForHash();
+
+  // active nav highlighting on scroll
+  var navLinks = document.querySelectorAll('#nav a');
+  var sections = [];
+  navLinks.forEach(function (a) {
+    var id = a.getAttribute('href');
+    if (id && id.startsWith('#')) {
+      var el = document.getElementById(id.substring(1));
+      if (el) sections.push({ el: el, link: a });
+    }
+  });
+  window.addEventListener('scroll', function () {
+    var scrollY = window.scrollY + 100;
+    var current = null;
+    sections.forEach(function (s) {
+      if (s.el.offsetTop <= scrollY) current = s.link;
+    });
+    navLinks.forEach(function (a) { a.classList.remove('active'); });
+    if (current) current.classList.add('active');
+  });
+})();
+</script>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="关闭">×</button>
+  <img id="lightboxImg" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+(function () {
+  var box = document.getElementById('lightbox');
+  var img = document.getElementById('lightboxImg');
+  var caption = document.getElementById('lightboxCaption');
+  if (!box || !img || !caption) return;
+  function open(src, text) {
+    img.src = src;
+    img.alt = text;
+    caption.textContent = text;
+    box.classList.add('is-open');
+    box.setAttribute('aria-hidden', 'false');
+  }
+  function close() {
+    box.classList.remove('is-open');
+    box.setAttribute('aria-hidden', 'true');
+    img.removeAttribute('src');
+    caption.textContent = '';
+  }
+  document.addEventListener('click', function (event) {
+    var target = event.target;
+    var zoomImage = target.closest ? target.closest('figure.zoomable img') : null;
+    if (zoomImage) {
+      var figure = zoomImage.closest('figure');
+      var captionEl = figure ? figure.querySelector('figcaption') : null;
+      open(zoomImage.currentSrc || zoomImage.src, captionEl ? captionEl.textContent : zoomImage.alt);
+      return;
+    }
+    if (target === box || target === img || (target.closest && target.closest('#lightboxClose'))) close();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && box.classList.contains('is-open')) close();
+  });
+})();
+</script>
+
+</body>
+</html>
