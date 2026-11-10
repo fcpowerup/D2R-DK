@@ -22,22 +22,22 @@
 
 ## 下载
 
-当前正式版：**v0.1.9.015** · build **2611100007**。
+当前正式版：**v0.1.9.016** · build **2611100422**。
 
-- [下载 ZIP（程序与离线使用说明）](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100007/D2R-DK_v0.1.9_build2611100007_p.zip)
-- [下载 EXE](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100007/D2R-DK_v0.1.9_build2611100007_p.exe)
-- [EXE 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100007/D2R-DK_v0.1.9_build2611100007_p.txt)
-- [ZIP 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100007/D2R-DK_v0.1.9_build2611100007_p.zip.txt)
+- [下载 ZIP（程序与离线使用说明）](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.zip)
+- [下载 EXE](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.exe)
+- [EXE 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.txt)
+- [ZIP 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.zip.txt)
 
 EXE SHA256：
 
 ```text
-FF2A49C9C497BE97385C51A446320485CE7C312106E6D2702800A5F770123F2F
+7612DD86CE64BFEAFF7FEA4A3F0AA26822B451E47E24CD6C4A67F0457638C480
 ```
 
 ## 使用说明
 
-[在线图文说明](https://fcpowerup.github.io/D2R-DK/) · [离线单文件说明](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100007/D2R-DK-user-guide.html)
+[在线图文说明](https://fcpowerup.github.io/D2R-DK/) · [离线单文件说明](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK-user-guide.html)
 
 ## 运行环境
 
