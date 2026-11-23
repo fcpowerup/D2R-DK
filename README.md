@@ -4,40 +4,33 @@
 
 支持国服与国际服多开，每个账号独立保存画质、键位、Mod 和启动参数，内置宝宝巴士与窗口布局管理。
 
-## 本次更新（v0.1.9）
+## 本次更新（v0.2.0）
 
-- 国服新增「战网登录」添加账号，与 Token 登录二选一；两者可并存，登录和建号都能用
-- 新增宝宝巴士：主号建房、小号自动加房，可只跟勾选账号，并可选择开车时最小化窗口（Pro 功能）
-- 新增 ESC 退房设置：文件夹形式的 Mod 可选「原样」「按2次」「按1次」，修改后从下一局起生效
-- 新增国服「更新游戏客户端」入口，更新完成后可保存当前战网账号
-- 窗口管理升级：布局改为 10 个，可设名字，记住最小化状态和窗口叠放顺序，支持数字键直接加载和两个布局来回切换，还能吸附到游戏窗口标题栏
-- 大幅提升登录和建房速度
-- 新增快速启动模式（Pro 功能，仅国服）
-- 新增死亡小退，需使用文件夹形式的 Mod，不支持 `.mpq` 打包格式
-- 新增开机自启，登录 Windows 后打开 D2R-DK
-- 新增右键「强制关闭此账号游戏」，可单独结束指定账号的游戏
-- 支持游戏运行中保存当前画质和自订键位，无需先关闭游戏
-- 更多设置按国服和国际服分别保存，包括启动间隔、自动布局、布局快捷键、自定义标题及 Mod 独立 Settings 等
-- 配置保护升级：启动、退出和升级迁移前自动备份，损坏时尝试恢复；完整迁移可带上有效的国服战网登录资料，并增加 30 天备份提醒
+- 适配国际服 3.4 版本
+- 适配红叶 2.9
+- 适配 WILL 3.4.0.1
+- TZ/DC 监控新增国际服备用源
+- Win10 用户也可以用上 Win11 的 UI 设计
+- 若干问题修复
 
 ## 下载
 
-当前正式版：**v0.1.9.016** · build **2611100422**。
+当前正式版：**v0.2.0.062** · build **2611232106**。
 
-- [下载 ZIP（程序与离线使用说明）](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.zip)
-- [下载 EXE](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.exe)
-- [EXE 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.txt)
-- [ZIP 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK_v0.1.9_build2611100422_p.zip.txt)
+- [下载 ZIP（程序与离线使用说明）](https://github.com/fcpowerup/D2R-DK/releases/download/v0.2.0-build2611232106/D2R-DK_v0.2.0_build2611232106_p.zip)
+- [下载 EXE](https://github.com/fcpowerup/D2R-DK/releases/download/v0.2.0-build2611232106/D2R-DK_v0.2.0_build2611232106_p.exe)
+- [EXE 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.2.0-build2611232106/D2R-DK_v0.2.0_build2611232106_p.txt)
+- [ZIP 哈希文件](https://github.com/fcpowerup/D2R-DK/releases/download/v0.2.0-build2611232106/D2R-DK_v0.2.0_build2611232106_p.zip.txt)
 
 EXE SHA256：
 
 ```text
-7612DD86CE64BFEAFF7FEA4A3F0AA26822B451E47E24CD6C4A67F0457638C480
+4BC50846415C0D3CEB63413738EDBC207F40D8EA51F79592E72CEE32F8F45789
 ```
 
 ## 使用说明
 
-[在线图文说明](https://fcpowerup.github.io/D2R-DK/) · [离线单文件说明](https://github.com/fcpowerup/D2R-DK/releases/download/v0.1.9-build2611100422/D2R-DK-user-guide.html)
+[在线图文说明](https://fcpowerup.github.io/D2R-DK/) · [离线单文件说明](https://github.com/fcpowerup/D2R-DK/releases/download/v0.2.0-build2611232106/D2R-DK-user-guide.html)
 
 ## 运行环境
 
